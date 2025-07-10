@@ -6,21 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Sidebar from './components/Sidebar';
 import { classRaceMap, specsByClass } from './constants';
-import { wow } from './auth';
+import TokenRealms from './components/TokenRealms';
 
 const races = Object.keys(classRaceMap);
 const uniqueClasses = Array.from(new Set(Object.values(classRaceMap).flat()));
 const itemPositionToChoose = 75;
 
 export default function App() {
-  // useEffect(() => {
-  //   const test = async () => {
-  //     const data = await wow('/data/wow/token/?namespace=dynamic-us');
-  //     return data;
-  //   }
-  //   test();
-  // }, []);
-
   const [offsetX, setOffsetX] = useState(0);
   const [history, setHistory] = useState([]);
   const isOpening = useRef(false);
@@ -163,7 +155,9 @@ export default function App() {
           ))}
         </ul>
       </div>
-      <Sidebar></Sidebar>
+      <Sidebar>
+        <TokenRealms />
+      </Sidebar>
       <Sidebar position='right' filter>
         <h2 className="text-xl mb-2">⚙️ Settings (exclure jusqu’à 3)</h2>
         <div className="mb-2">
