@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+      "paths": { "@/*": ["src/*"] },
+    "moduleResolution": "bundler",
+    "module": "esnext",
+    "skipLibCheck": true
+  },
+  "include": ["vite.config.ts"]
+}
