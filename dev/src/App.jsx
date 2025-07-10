@@ -5,31 +5,11 @@ import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Sidebar from './components/Sidebar';
+import { classRaceMap, specsByClass } from './constants';
+import { wow } from './auth';
 
-const data = {
-  races: [
-    "Humain", "Nain", "Gnome", "Elfe de la nuit", "Draeneï",
-    "Worgen", "Pandaren", "Elfe du vide", "Nain sombrefer", "Mécagnome",
-    "Orc", "Troll", "Tauren", "Elfe de sang", "Mort-vivant",
-    "Gobelin", "Orc mag'har", "Tauren de Haut-Roc", "Troll zandalari",
-    "Vulpérin", "Elfe sacrenuit"
-  ],
-  classes: {
-    Guerrier: ["Armes", "Fureur", "Protection"],
-    Paladin: ["Sacré", "Protection", "Vindicte"],
-    Chasseur: ["Maîtrise des bêtes", "Précision", "Survie"],
-    Voleur: ["Assassinat", "Hors‑la‑loi", "Finesse"],
-    Prêtre: ["Discipline", "Sacré", "Ombre"],
-    "Chevalier de la mort": ["Sang", "Givre", "Impie"],
-    Chaman: ["Élémentaire", "Amélioration", "Restauration"],
-    Mage: ["Arcanes", "Feu", "Givre"],
-    Démoniste: ["Affliction", "Démonologie", "Destruction"],
-    Moine: ["Maître brasseur", "Tisse‑brume", "Marche‑vent"],
-    "Chasseur de démons": ["Dévastation", "Vengeance"],
-    Druide: ["Équilibre", "Farouche", "Gardien", "Restauration"],
-    Évocateur: ["Augmentation", "Préservation", "Dévastation"]
-  }
-};
+const races = Object.keys(classRaceMap);
+const uniqueClasses = Array.from(new Set(Object.values(classRaceMap).flat()));
 
 function getRandomChar(allowedRaces, allowedClasses, allowedSpecs) {
   const race = allowedRaces[(Math.random() * allowedRaces.length) | 0];
@@ -39,6 +19,14 @@ function getRandomChar(allowedRaces, allowedClasses, allowedSpecs) {
 }
 
 export default function App() {
+  // useEffect(() => {
+  //   const test = async () => {
+  //     const data = await wow('/data/wow/token/?namespace=dynamic-us');
+  //     return data;
+  //   }
+  //   test();
+  // }, []);
+
   const [items, setItems] = useState([]);
   const [offsetX, setOffsetX] = useState(0);
   const [history, setHistory] = useState([]);
@@ -51,11 +39,11 @@ export default function App() {
   const [excludedClasses, setExcludedClasses] = useState([]);
   const [excludedSpec, setExcludedSpec] = useState("");
 
-  const allowedRaces = data.races.filter(r => !excludedRaces.includes(r));
-  const allowedClasses = Object.keys(data.classes).filter(c => !excludedClasses.includes(c));
+  const allowedRaces = races.filter(r => !excludedRaces.includes(r));
+  const allowedClasses = Object.values(uniqueClasses).filter(c => !excludedClasses.includes(c));  
   const allowedSpecs = {};
-  allowedClasses.forEach(c => {
-    allowedSpecs[c] = data.classes[c].filter(s => s !== excludedSpec);
+  allowedClasses.forEach(c => {    
+    allowedSpecs[c] = specsByClass[c].filter(s => s !== excludedSpec);
   });
 
   const genItems = () => Array.from({ length: 80 }, () =>
@@ -145,7 +133,7 @@ export default function App() {
         <div className="mb-2">
           <h3 className='flex justify-start'>Races exclues :</h3>
           <div className="flex flex-wrap gap-1">
-            {data.races.map(r => (
+            {races.map(r => (
               <button
                 key={r}
                 className={`px-2 py-1 rounded text-xs ${excludedRaces.includes(r) ? "bg-red-500" : "bg-gray-700"}`}
@@ -159,7 +147,7 @@ export default function App() {
         <div className="mb-2">
           <p>Classes exclues :</p>
           <div className="flex flex-wrap gap-1">
-            {Object.keys(data.classes).map(c => (
+            {Object.keys(uniqueClasses).map(c => (
               <button
                 key={c}
                 className={`px-2 py-1 rounded ${excludedClasses.includes(c) ? "bg-red-500" : "bg-gray-700"}`}
@@ -173,7 +161,7 @@ export default function App() {
         <div>
           <p>Spécialisation exclue :</p>
           <div className="flex flex-wrap gap-1">
-            {Array.from(new Set(Object.values(data.classes).flat())).map(s => (
+            {Array.from(new Set(Object.values(uniqueClasses).flat())).map(s => (
               <button
                 key={s}
                 className={`px-2 py-1 rounded ${excludedSpec === s ? "bg-red-500" : "bg-gray-700"}`}
