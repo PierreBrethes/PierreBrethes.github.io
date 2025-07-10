@@ -78,7 +78,6 @@ const VENGEANCE = "Vengeance";
 const AUGMENTATION = "Augmentation";
 const PRESERVATION = "Préservation";
 
-// Mise à jour des objets
 const classRaceMap = {
     [HUMAIN]: [GUERRIER, PALADIN, CHASSEUR, VOLEUR, PRETRE, DEMONISTE, CHEVALIER_DE_LA_MORT, MOINE],
     [NAIN]: [GUERRIER, PALADIN, CHASSEUR, VOLEUR, PRETRE, DEMONISTE, CHAMAN, CHEVALIER_DE_LA_MORT, MOINE],
